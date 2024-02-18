@@ -16,10 +16,25 @@ import os
 #    for filename in filenames:
 #        print(os.path.join(dirname, filename))
 # Define the name of the new folder
-new_folder_name = "CC"
+# new_folder_name = "CC"
 
 # Path for the new folder
-new_folder_path = f'/kaggle/working/sorted_images/{new_folder_name}'
+new_folder_path = '/kaggle/working/sorted_images/CC'
+if not os.path.exists(new_folder_path):
+    os.makedirs(new_folder_path)
+new_folder_path = '/kaggle/working/sorted_images/EC'
+if not os.path.exists(new_folder_path):
+    os.makedirs(new_folder_path)
+new_folder_path = '/kaggle/working/sorted_images/MC'
+if not os.path.exists(new_folder_path):
+    os.makedirs(new_folder_path)
+new_folder_path = '/kaggle/working/sorted_images/LGSC'
+if not os.path.exists(new_folder_path):
+    os.makedirs(new_folder_path)
+new_folder_path = '/kaggle/working/sorted_images/HGSC'
+if not os.path.exists(new_folder_path):
+    os.makedirs(new_folder_path)
+new_folder_path = '/kaggle/working/sorted_images/other'
 if not os.path.exists(new_folder_path):
     os.makedirs(new_folder_path)
 
