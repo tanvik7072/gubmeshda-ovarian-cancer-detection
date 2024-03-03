@@ -10,7 +10,7 @@ model = model.to('cuda')
 
 #Defining new untrained feed-forward network
 classifier = nn.Sequential(nn.Linear(25088,4096),
-                          nn.ReLU(), #activation function - ReLU is effective, computationally inexpensive 
+                          nn.ReLU(), #activation function - ReLU is effective, computationally inexpensive
                                      #and removes the vanishing gradient problem
                           nn.Dropout(0.2),
                           nn.Linear(4096, 256),
