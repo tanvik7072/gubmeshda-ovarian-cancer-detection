@@ -74,7 +74,8 @@ def adjust_random_brightness(image_path, file_name):
     BA_image = enhancer.enhance(random_factor)
 
     # Create a new file name for the adjusted image
-    brightness_image_path = os.path.join(folder_path, f"{file_name}_brightness_altered")
+    file_name = os.path.splitext(file_name)[0]  # Remove file extension
+    brightness_image_path = os.path.join(folder_path, f"{file_name}_brightness_altered.png")
 
 
     # Save the adjusted image
@@ -99,16 +100,17 @@ def adjust_contrast(image_path, file_name):
     contrast_image = enhancer.enhance(random_factor)
 
     # Create a new file name for the adjusted image
-    contrast_image_path = os.path.join(folder_path, f"{file_name}_contrast_altered")
+    file_name = os.path.splitext(file_name)[0]  # Remove file extension
+    contrast_image_path = os.path.join(folder_path, f"{file_name}_contrast_altered.png")
 
     # Save the adjusted image
     contrast_image.save(contrast_image_path)
     print(f"Contrast adjusted image saved: {contrast_image_path}")
 
 
-def random_crop(image, file_name):
+def random_crop(image):
     '''
-    Cropping the image in the center from a random margin from the borders
+    Cropping the image in the centre from a random margin from the borders
     '''
     margin = 1 / 3.5
     width, height = image.size
@@ -133,8 +135,9 @@ def crop_images(image_path, file_name):
     cropped_image = random_crop(original_image)
 
     # Create a new file name for the cropped image
-    cropped_image_path = os.path.join(folder_path, f"{file_name}_cropped")
-
+    file_name = os.path.splitext(file_name)[0]  # Remove file extension
+    cropped_image_path = os.path.join(folder_path, f"{file_name}_cropped.png")
+    
     # Save the cropped image
     cropped_image.save(cropped_image_path)
     print(f"Cropped image saved: {cropped_image_path}")
@@ -152,11 +155,12 @@ def horizontal_flip_images(image_path, file_name):
     flipped_image = original_image.transpose(Image.FLIP_LEFT_RIGHT)
 
     # Create a new file name for the flipped image
-    flipped_image_path = os.path.join(folder_path, f"{file_name}_hflipped")
+    file_name = os.path.splitext(file_name)[0]  # Remove file extension
+    hflipped_image_path = os.path.join(folder_path, f"{file_name}_hflipped.png")
 
     # Save the flipped image
-    flipped_image.save(flipped_image_path)
-    print(f"Horizontal flipped image saved: {flipped_image_path}")
+    flipped_image.save(hflipped_image_path)
+    print(f"Horizontal flipped image saved: {hflipped_image_path}")
 
 
 def vertical_flip_images(image_path, file_name):
@@ -171,10 +175,13 @@ def vertical_flip_images(image_path, file_name):
     flipped_image = original_image.transpose(Image.FLIP_TOP_BOTTOM)
 
     # Create a new file name for the flipped image
-    flipped_image_path = os.path.join(folder_path, f"{file_name}_vflipped")
+    file_name = os.path.splitext(file_name)[0]  # Remove file extension
+    vflipped_image_path = os.path.join(folder_path, f"{file_name}_vflipped.png")
+
+    
     # Save the flipped image
-    flipped_image.save(flipped_image_path)
-    print(f"Vertical flipped image saved: {flipped_image_path}")
+    flipped_image.save(vflipped_image_path)
+    print(f"Vertical flipped image saved: {vflipped_image_path}")
 
 
 def add_random_gaussian_noise(image_path, file_name):
@@ -213,7 +220,9 @@ def add_random_gaussian_noise(image_path, file_name):
 
 
     # Create a new file name for the adjusted image
-    noisy_path = os.path.join(folder_path, f"{file_name}_noisy")
+    file_name = os.path.splitext(file_name)[0]  # Remove file extension
+    noisy_path = os.path.join(folder_path, f"{file_name}_noisy.png")
+
 
     # Save the noisy image
     noisy_image_pil.save(noisy_path)
