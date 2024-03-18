@@ -281,7 +281,7 @@ for image in images_to_move:
 #After scaling and augmenting the data, we need to make sure the new images have their original unique numerical id + "_flipped"
 # The following class makes sure that pytorch can process the dataset during training, including accessing labels
 
-class CustomDataset(Dataset):
+class CustomDataset():
     def __init__(self, root_dir, csv_file):
         self.root_dir = root_dir
         self.df = pd.read_csv(csv_file)
