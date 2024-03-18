@@ -256,3 +256,137 @@ def augment(folder_path):
 #Calling the function
 folder_path = '/kaggle/working/rescaled_images' #after scaling, images saved here
 augment(folder_path)
+
+# Set the paths
+valid_images_path = '/kaggle/output/valid_images'
+
+# Create the validation folder if it doesn't exist
+os.makedirs(valid_images_path, exist_ok=True)
+
+# Get the list of all images in the train folder
+all_images = os.listdir(train_images_path)
+
+# Calculate the number of images to move (25%)
+num_images_to_move = int(0.25 * len(all_images))
+
+# Randomly select the images to move
+images_to_move = random.sample(all_images, num_images_to_move)
+
+# Move the selected images to the validation folder
+for image in images_to_move:
+    src_path = os.path.join(train_images_path, image)
+    dest_path = os.path.join(valid_images_path, image)
+    shutil.move(src_path, dest_path)
+
+#After scaling and augmenting the data, we need to make sure the new images have their original unique numerical id + "_flipped"
+# The following class makes sure that pytorch can process the dataset during training, including accessing labels
+
+class CustomDataset(Dataset):
+    def __init__(self, root_dir, csv_file):
+        self.root_dir = root_dir
+        self.df = pd.read_csv(csv_file)
+        self.mapping_dict = self.create_mapping_dict()
+
+    def create_mapping_dict(self):
+        mapping_dict = {}
+        for idx in range(len(self.df)):
+            numeric_id = str(self.df.iloc[idx, 0])  # Assuming the numeric ID is in the first column
+            for suffix in ['blurred', 'noisy', 'hflipped', 'vflipped', 'cropped']:
+                augmented_id = f"{numeric_id}_{suffix}"
+                mapping_dict[augmented_id] = numeric_id
+        return mapping_dict
+
+    def __len__(self):
+        # Count the total number of augmented images (5 times the number of original images)
+        return len(self.mapping_dict)
+
+    def __getitem__(self, idx):
+        augmented_id = list(self.mapping_dict.keys())[idx]
+        numeric_id = self.mapping_dict[augmented_id]
+
+        img_path = os.path.join(self.root_dir, f"{numeric_id}_{augmented_id.split('_')[1]}.png")
+        image = Image.open(img_path)
+
+        label = self.df.loc[self.df['numeric_id'] == int(numeric_id), 'label'].values[0]
+
+        return image, label
+
+
+#dataset and dataloaders
+training_dataset = CustomDataset(csv_file='/kaggle/input/UBC-OCEAN/train.csv', root_dir='/kaggle/input/UBC-OCEAN/train_images')
+train_DL = DataLoader(training_dataset, batch_size=32, shuffle=True)
+
+#repeat for validation
+validation_dataset = CustomDataset(csv_file='/kaggle/input/UBC-OCEAN/train.csv', root_dir='/kaggle/input/UBC-OCEAN/valid_images')
+validation_DL = DataLoader(validation_dataset, batch_size=32, shuffle=True)
+
+
+# TODO: Build and train your network
+model = models.vgg16(pretrained = True) #Loading pre-trained network
+
+#Freeze parameters to avoid backpropagation
+for param in model.parameters():
+    param.requires_grad = False
+
+
+model = model.to('cuda')
+
+#Defining new untrained feed-forward network
+classifier = nn.Sequential(nn.Linear(25088,4096),
+                          nn.ReLU(), #activation function - ReLU is effective, computationally inexpensive
+                                     #and removes the vanishing gradient problem
+                          nn.Dropout(0.2),
+                          nn.Linear(4096, 256),
+                          nn.ReLU(),
+                          nn.Dropout(0.2),
+                          nn.Linear(256, 64),
+                          nn.Dropout(0.2), #Removed 20% of data each time, good place to start
+                          nn.Linear(64, 6),  #Must be 6 because 6 = number of classes
+                          nn.LogSoftmax(dim=1))
+
+
+classifier = classifier.to('cuda')
+model.classifier = classifier
+criterion = nn.NLLLoss()
+optimizer = optim.Adam(model.classifier.parameters(), lr = 0.01)
+
+#Training
+epochs = 5 #maybe change to 10 later on? depending on output
+train_loss = 0
+
+for epoch in range(epochs):
+    #model.train()
+    for inputs, labels in train_DL:
+      model.train()
+      inputs, labels = inputs.to('cuda'), labels.to('cuda')
+      optimizer.zero_grad()
+      outputs = model.forward(inputs)
+      loss = criterion(outputs, labels)
+      loss.backward()
+      optimizer.step()
+
+      train_loss += loss.item()
+
+
+    model.eval()
+    with torch.inference_mode():
+      validation_loss = 0
+      accuracy = 0
+      for inputs, labels in validation_DL:
+          inputs, labels = inputs.to('cuda'), labels.to('cuda')
+          outputs = model.forward(inputs)
+          running_valid_loss = criterion(outputs, labels).item()
+          validation_loss += running_valid_loss
+
+          ps = torch.exp(outputs)
+          top_p, top_class = ps.topk(1, dim = 1)
+          equals = top_class == labels.view(*top_class.shape)
+          accuracy += torch.mean(equals.type(torch.FloatTensor))
+
+    print(f"Epoch {epoch+1}/{epochs}...",
+          f"Train loss: {train_loss/len(train_DL):.3f}..."
+        f"Validation loss: {validation_loss/len(validation_DL):.3f}..."
+        f"Validation accuracy: {accuracy:.3f}...")
+    train_loss = 0
+
+
