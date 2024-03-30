@@ -359,7 +359,7 @@ for epoch in range(epochs):
     #model.train()
     for inputs, labels in train_DL:
       model.train()
-      inputs, labels = inputs.to('cuda'), labels.to('cuda')
+      #inputs, labels = inputs.to('cuda'), labels.to('cuda')
       optimizer.zero_grad()
       outputs = model.forward(inputs)
       loss = criterion(outputs, labels)
@@ -374,7 +374,7 @@ for epoch in range(epochs):
       validation_loss = 0
       accuracy = 0
       for inputs, labels in validation_DL:
-          inputs, labels = inputs.to('cuda'), labels.to('cuda')
+          #inputs, labels = inputs.to('cuda'), labels.to('cuda')
           outputs = model.forward(inputs)
           running_valid_loss = criterion(outputs, labels).item()
           validation_loss += running_valid_loss
