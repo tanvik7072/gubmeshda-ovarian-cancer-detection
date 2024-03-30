@@ -330,7 +330,7 @@ for param in model.parameters():
     param.requires_grad = False
 
 
-model = model.to('cuda')
+#model = model.to('cuda')
 
 #Defining new untrained feed-forward network
 classifier = nn.Sequential(nn.Linear(25088,4096),
@@ -346,7 +346,7 @@ classifier = nn.Sequential(nn.Linear(25088,4096),
                           nn.LogSoftmax(dim=1))
 
 
-classifier = classifier.to('cuda')
+#classifier = classifier.to('cuda')
 model.classifier = classifier
 criterion = nn.NLLLoss()
 optimizer = optim.Adam(model.classifier.parameters(), lr = 0.01)
