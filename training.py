@@ -1,3 +1,4 @@
+from torch import nn
 # TODO: Build and train your network
 model = models.vgg16(pretrained = True) #Loading pre-trained network
 
