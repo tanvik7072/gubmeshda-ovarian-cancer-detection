@@ -19,10 +19,10 @@ def adjust_random_brightness(image_path):
     BA_image = enhancer.enhance(random_factor)
 
     # Create a new file name for the adjusted image
-    brightness_image_path = os.path.join(folder_path, f"{file_name}_brightness_altered")
-
-
-    # Save the adjusted image
+    numeric_id = file_name.split('_')[0]
+    suffix = 'brightness_altered'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    brightness_image_path = os.path.join(folder_path, adjusted_file_name)
     BA_image.save(brightness_image_path)
     print(f"Brightness adjusted image saved: {brightness_image_path}")
 
@@ -44,7 +44,10 @@ def adjust_contrast(image_path):
     contrast_image = enhancer.enhance(random_factor)
 
     # Create a new file name for the adjusted image
-    contrast_image_path = os.path.join(folder_path, f"{file_name}_contrast_altered")
+    numeric_id = file_name.split('_')[0]
+    suffix = 'contrast_altered'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    contrast_image_path = os.path.join(folder_path, adjusted_file_name)
 
     # Save the adjusted image
     contrast_image.save(contrast_image_path)
@@ -78,9 +81,10 @@ def crop_images(image_path):
     cropped_image = random_crop(original_image)
 
     # Create a new file name for the cropped image
-    cropped_image_path = os.path.join(folder_path, f"{file_name}_cropped")
-
-    # Save the cropped image
+    numeric_id = file_name.split('_')[0]
+    suffix = 'cropped'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    cropped_image_path = os.path.join(folder_path, adjusted_file_name)
     cropped_image.save(cropped_image_path)
     print(f"Cropped image saved: {cropped_image_path}")
 
@@ -96,12 +100,12 @@ def horizontal_flip_images(image_path):
     # Perform horizontal flipping
     flipped_image = original_image.transpose(Image.FLIP_LEFT_RIGHT)
 
-    # Create a new file name for the flipped image
-    flipped_image_path = os.path.join(folder_path, f"{file_name}_hflipped")
-
-    # Save the flipped image
-    flipped_image.save(flipped_image_path)
-    print(f"Horizontal flipped image saved: {flipped_image_path}")
+    numeric_id = file_name.split('_')[0]
+    suffix = 'hflipped'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    hflipped_image_path = os.path.join(folder_path, adjusted_file_name)
+    flipped_image.save(hflipped_image_path)
+    print(f"Horizontal flipped image saved: {hflipped_image_path}")
 
 
 def vertical_flip_images(image_path):
@@ -115,11 +119,13 @@ def vertical_flip_images(image_path):
     # Perform vertical flipping
     flipped_image = original_image.transpose(Image.FLIP_TOP_BOTTOM)
 
-    # Create a new file name for the flipped image
-    flipped_image_path = os.path.join(folder_path, f"{file_name}_vflipped")
-    # Save the flipped image
-    flipped_image.save(flipped_image_path)
-    print(f"Vertical flipped image saved: {flipped_image_path}")
+    #Save
+    numeric_id = file_name.split('_')[0]
+    suffix = 'vflipped'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    vflipped_image_path = os.path.join(folder_path, adjusted_file_name)
+    flipped_image.save(vflipped_image_path)
+    print(f"Vertical flipped image saved: {vflipped_image_path}")
 
 
 def add_random_gaussian_noise(folder_path):
@@ -158,11 +164,15 @@ def add_random_gaussian_noise(folder_path):
 
 
     # Create a new file name for the adjusted image
-    noisy_path = os.path.join(folder_path, f"{file_name}_noisy")
+    numeric_id = file_name.split('_')[0]
+    suffix = 'noisy'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    noisy_image_path = os.path.join(folder_path, adjusted_file_name)
+    noisy_image_pil.save(noisy_image_path)
+
 
     # Save the noisy image
-    noisy_image_pil.save(noisy_path)
-    print(f"Added Gaussian noise with sigma = {sigma}. Saved to {noisy_path}")
+    print(f"Added Gaussian noise with sigma = {sigma}. Saved to {noisy_image_path}")
 
 
 ##USAGE
@@ -190,5 +200,5 @@ def augment(folder_path):
             add_random_gaussian_noise(image_path)
 
 #Calling the function:
-folder_path = '/kaggle/output/train_images' #after scaling, images saved here
+folder_path = '/kaggle/working/train_images' #after scaling, images saved here
 augment(folder_path)
