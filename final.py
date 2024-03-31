@@ -308,7 +308,7 @@ class CustomDataset():
         img_path = os.path.join(self.root_dir, f"{numeric_id}_{augmented_id.split('_')[1]}.png")
         image = Image.open(img_path)
 
-        label = self.df.loc[self.df['numeric_id'] == int(numeric_id), 'label'].values[0]
+        label = self.df.loc[self.df['image_id'] == int(numeric_id), 'label'].values[0]
 
         return image, label
 
