@@ -292,7 +292,7 @@ class CustomDataset():
         mapping_dict = {}
         for idx in range(len(self.df)):
             numeric_id = str(self.df.iloc[idx, 0])  # Assuming the numeric ID is in the first column
-            for suffix in ['blurred', 'noisy', 'hflipped', 'vflipped', 'cropped']:
+            for suffix in ['brightness', 'noisy', 'hflipped', 'vflipped', 'cropped', 'contrast']:
                 augmented_id = f"{numeric_id}_{suffix}"
                 mapping_dict[augmented_id] = numeric_id
         return mapping_dict
