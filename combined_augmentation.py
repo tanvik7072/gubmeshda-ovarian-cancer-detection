@@ -19,7 +19,7 @@ def adjust_random_brightness(image_path):
     BA_image = enhancer.enhance(random_factor)
 
     # Create a new file name for the adjusted image
-    brightness_image_path = os.path.join(folder_path, f"{file_name}_brightness_altered")
+    brightness_image_path = os.path.join(folder_path, f"{file_name}_brightness")
 
 
     # Save the adjusted image
@@ -44,7 +44,7 @@ def adjust_contrast(image_path):
     contrast_image = enhancer.enhance(random_factor)
 
     # Create a new file name for the adjusted image
-    contrast_image_path = os.path.join(folder_path, f"{file_name}_contrast_altered")
+    contrast_image_path = os.path.join(folder_path, f"{file_name}_contrast")
 
     # Save the adjusted image
     contrast_image.save(contrast_image_path)
