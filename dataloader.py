@@ -11,7 +11,7 @@ class CustomDataset():
         mapping_dict = {}
         for idx in range(len(self.df)):
             numeric_id = str(self.df.iloc[idx, 0])  # Assuming the numeric ID is in the first column
-            for suffix in ['brightness_altered', 'noisy', 'hflipped', 'vflipped', 'cropped', 'contrast_altered']:
+            for suffix in ['brightness', 'noisy', 'hflipped', 'vflipped', 'cropped', 'contrast']:
                 augmented_id = f"{numeric_id}_{suffix}"
                 mapping_dict[augmented_id] = numeric_id
         return mapping_dict
@@ -22,9 +22,9 @@ class CustomDataset():
 
     def __getitem__(self, idx):
         augmented_id = list(self.mapping_dict.keys())[idx]
-        numeric_id = self.mapping_dict[augmented_id]
+        numeric_id = str(self.df.iloc[idx, 0])
 
-        img_path = os.path.join(self.root_dir, f"{numeric_id}_{augmented_id.split('_')[1]}.png")
+        img_path = os.path.join(self.root_dir, f"{numeric_id}_{suffix}.png")
         image = Image.open(img_path)
 
         label = self.df.loc[self.df['image_id'] == int(numeric_id), 'label'].values[0]

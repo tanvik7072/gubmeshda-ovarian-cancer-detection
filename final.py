@@ -76,7 +76,7 @@ def adjust_random_brightness(image_path, file_name):
 
     # Create a new file name for the adjusted image
     file_name = os.path.splitext(file_name)[0]  # Remove file extension
-    brightness_image_path = os.path.join(folder_path, f"{file_name}_brightness_altered.png")
+    brightness_image_path = os.path.join(folder_path, f"{file_name}_brightness.png")
 
 
     # Save the adjusted image
@@ -102,7 +102,7 @@ def adjust_contrast(image_path, file_name):
 
     # Create a new file name for the adjusted image
     file_name = os.path.splitext(file_name)[0]  # Remove file extension
-    contrast_image_path = os.path.join(folder_path, f"{file_name}_contrast_altered.png")
+    contrast_image_path = os.path.join(folder_path, f"{file_name}_contrast.png")
 
     # Save the adjusted image
     contrast_image.save(contrast_image_path)
@@ -292,7 +292,7 @@ class CustomDataset():
         mapping_dict = {}
         for idx in range(len(self.df)):
             numeric_id = str(self.df.iloc[idx, 0])  # Assuming the numeric ID is in the first column
-            for suffix in ['blurred', 'noisy', 'hflipped', 'vflipped', 'cropped']:
+            for suffix in ['brightness', 'noisy', 'hflipped', 'vflipped', 'cropped', 'contrast']:
                 augmented_id = f"{numeric_id}_{suffix}"
                 mapping_dict[augmented_id] = numeric_id
         return mapping_dict
@@ -302,10 +302,11 @@ class CustomDataset():
         return len(self.mapping_dict)
 
     def __getitem__(self, idx):
+        numeric_id = str(self.df.iloc[idx, 0])
         augmented_id = list(self.mapping_dict.keys())[idx]
-        numeric_id = self.mapping_dict[augmented_id]
+        
 
-        img_path = os.path.join(self.root_dir, f"{numeric_id}_{augmented_id.split('_')[1]}.png")
+        img_path = os.path.join(self.root_dir, f"{numeric_id}_{suffix}.png")
         image = Image.open(img_path)
 
         label = self.df.loc[self.df['image_id'] == int(numeric_id), 'label'].values[0]
