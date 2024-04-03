@@ -330,7 +330,7 @@ for param in model.parameters():
     param.requires_grad = False
 
 
-model = model.to('cuda')
+#model = model.to('cuda')
 
 #Defining new untrained feed-forward network
 classifier = nn.Sequential(nn.Linear(25088,4096),
@@ -346,7 +346,7 @@ classifier = nn.Sequential(nn.Linear(25088,4096),
                           nn.LogSoftmax(dim=1))
 
 
-classifier = classifier.to('cuda')
+#classifier = classifier.to('cuda')
 model.classifier = classifier
 criterion = nn.NLLLoss()
 optimizer = optim.Adam(model.classifier.parameters(), lr = 0.01)
@@ -359,7 +359,7 @@ for epoch in range(epochs):
     #model.train()
     for inputs, labels in train_DL:
       model.train()
-      inputs, labels = inputs.to('cuda'), labels.to('cuda')
+      #inputs, labels = inputs.to('cuda'), labels.to('cuda')
       optimizer.zero_grad()
       outputs = model.forward(inputs)
       loss = criterion(outputs, labels)
@@ -374,7 +374,7 @@ for epoch in range(epochs):
       validation_loss = 0
       accuracy = 0
       for inputs, labels in validation_DL:
-          inputs, labels = inputs.to('cuda'), labels.to('cuda')
+          #inputs, labels = inputs.to('cuda'), labels.to('cuda')
           outputs = model.forward(inputs)
           running_valid_loss = criterion(outputs, labels).item()
           validation_loss += running_valid_loss
