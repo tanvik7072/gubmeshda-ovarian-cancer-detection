@@ -33,9 +33,9 @@ class CustomDataset():
 
 
 #dataset and dataloaders
-training_dataset = CustomDataset(csv_file='/kaggle/input/UBC-OCEAN/train.csv', root_dir='/kaggle/input/UBC-OCEAN/train_images')
+training_dataset = CustomDataset(root_dir='/kaggle/working/rescaled_images', csv_file='/kaggle/input/UBC-OCEAN/train.csv')
 train_DL = DataLoader(training_dataset, batch_size=32, shuffle=True)
 
 #repeat for validation
-validation_dataset = CustomDataset(csv_file='/kaggle/input/UBC-OCEAN/train.csv', root_dir='/kaggle/input/UBC-OCEAN/valid_images')
+validation_dataset = CustomDataset(root_dir='/kaggle/working/valid_images', csv_file='/kaggle/input/UBC-OCEAN/train.csv')
 validation_DL = DataLoader(validation_dataset, batch_size=32, shuffle=True)
