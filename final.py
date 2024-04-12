@@ -303,6 +303,7 @@ class CustomDataset():
         return len(self.mapping_dict)
 
     def __getitem__(self, idx):
+        idx = idx % len(self.df)
         augmented_id = list(self.mapping_dict.keys())[idx]
         numeric_id = self.mapping_dict[augmented_id]
 
