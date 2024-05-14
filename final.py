@@ -76,11 +76,10 @@ def adjust_random_brightness(image_path, file_name):
     BA_image = enhancer.enhance(random_factor)
 
     # Create a new file name for the adjusted image
-    file_name = os.path.splitext(file_name)[0]  # Remove file extension
-    brightness_image_path = os.path.join(folder_path, f"{file_name}_brightness_altered.png")
-
-
-    # Save the adjusted image
+    numeric_id = file_name.split('_')[0]
+    suffix = 'brightness_altered'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    brightness_image_path = os.path.join(folder_path, adjusted_file_name)
     BA_image.save(brightness_image_path)
     print(f"Brightness adjusted image saved: {brightness_image_path}")
 
@@ -102,8 +101,10 @@ def adjust_contrast(image_path, file_name):
     contrast_image = enhancer.enhance(random_factor)
 
     # Create a new file name for the adjusted image
-    file_name = os.path.splitext(file_name)[0]  # Remove file extension
-    contrast_image_path = os.path.join(folder_path, f"{file_name}_contrast_altered.png")
+    numeric_id = file_name.split('_')[0]
+    suffix = 'contrast_altered'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    contrast_image_path = os.path.join(folder_path, adjusted_file_name)
 
     # Save the adjusted image
     contrast_image.save(contrast_image_path)
@@ -137,10 +138,10 @@ def crop_images(image_path, file_name):
     cropped_image = random_crop(original_image)
 
     # Create a new file name for the cropped image
-    file_name = os.path.splitext(file_name)[0]  # Remove file extension
-    cropped_image_path = os.path.join(folder_path, f"{file_name}_cropped.png")
-    
-    # Save the cropped image
+    numeric_id = file_name.split('_')[0]
+    suffix = 'cropped'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    cropped_image_path = os.path.join(folder_path, adjusted_file_name)
     cropped_image.save(cropped_image_path)
     print(f"Cropped image saved: {cropped_image_path}")
 
@@ -156,11 +157,11 @@ def horizontal_flip_images(image_path, file_name):
     # Perform horizontal flipping
     flipped_image = original_image.transpose(Image.FLIP_LEFT_RIGHT)
 
-    # Create a new file name for the flipped image
-    file_name = os.path.splitext(file_name)[0]  # Remove file extension
-    hflipped_image_path = os.path.join(folder_path, f"{file_name}_hflipped.png")
-
-    # Save the flipped image
+    # Create a new file name for the flipped image and save
+    numeric_id = file_name.split('_')[0]
+    suffix = 'hflipped'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    hflipped_image_path = os.path.join(folder_path, adjusted_file_name)
     flipped_image.save(hflipped_image_path)
     print(f"Horizontal flipped image saved: {hflipped_image_path}")
 
@@ -176,12 +177,11 @@ def vertical_flip_images(image_path, file_name):
     # Perform vertical flipping
     flipped_image = original_image.transpose(Image.FLIP_TOP_BOTTOM)
 
-    # Create a new file name for the flipped image
-    file_name = os.path.splitext(file_name)[0]  # Remove file extension
-    vflipped_image_path = os.path.join(folder_path, f"{file_name}_vflipped.png")
-
-    
-    # Save the flipped image
+    #Save
+    numeric_id = file_name.split('_')[0]
+    suffix = 'vflipped'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    vflipped_image_path = os.path.join(folder_path, adjusted_file_name)
     flipped_image.save(vflipped_image_path)
     print(f"Vertical flipped image saved: {vflipped_image_path}")
 
@@ -222,13 +222,13 @@ def add_random_gaussian_noise(image_path, file_name):
 
 
     # Create a new file name for the adjusted image
-    file_name = os.path.splitext(file_name)[0]  # Remove file extension
-    noisy_path = os.path.join(folder_path, f"{file_name}_noisy.png")
-
-
+    numeric_id = file_name.split('_')[0]
+    suffix = 'noisy'
+    adjusted_file_name = f"{numeric_id}_{suffix}.png"  # Construct adjusted file name
+    noisy_image_path = os.path.join(folder_path, adjusted_file_name)
+    noisy_image_pil.save(noisy_image_path)
     # Save the noisy image
-    noisy_image_pil.save(noisy_path)
-    print(f"Added Gaussian noise with sigma = {sigma}. Saved to {noisy_path}")
+    print(f"Added Gaussian noise with sigma = {sigma}. Saved to {noisy_image_path}")
 
 #Combined function
 
