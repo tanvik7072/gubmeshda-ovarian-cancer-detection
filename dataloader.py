@@ -38,4 +38,6 @@ train_DL = DataLoader(training_dataset, batch_size=32, shuffle=True)
 
 #repeat for validation
 validation_dataset = CustomDataset(root_dir='/kaggle/working/valid_images', csv_file='/kaggle/input/UBC-OCEAN/train.csv')
-validation_DL = DataLoader(validation_dataset, batch_size=32, shuffle=True)
+validation_DL = DataLoader(validation_dataset, batch_size=64, shuffle=True)
+'
+'
